@@ -91,9 +91,15 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
         try:
             latest_entries = int(latest_entries)
             if latest_entries > 0:
-                with YoutubeDL({"quiet": True, "no_warnings": True}) as ydl:
+                with YoutubeDL({"quiet": True, "no_warnings": True, "extract_flat": True}) as ydl:
                     playlist_info = ydl.extract_info(url, download=False)
-                entries = playlist_info.get("entries") if isinstance(playlist_info, dict) else None
+
+                entries = None
+                if isinstance(playlist_info, dict):
+                    entries = playlist_info.get("entries")
+                elif isinstance(playlist_info, list):
+                    entries = playlist_info
+
                 if entries and isinstance(entries, list):
                     total = len(entries)
                     if total > latest_entries:
@@ -102,6 +108,7 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
                         print(f"Limiting playlist to latest {latest_entries} entries (items {playlist_items})")
         except Exception as e:
             print(f"Warning: could not resolve latest_entries status for {url}: {e}")
+            print("Continuing without latest_entries filtering.")
 
     ydl_opts = {
         "format": f"bestaudio[ext={default_format}]/bestaudio/best",
