@@ -12,7 +12,7 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 keywords = ["youtube", "playlist", "audiobookshelf", "yt-dlp"]
-dependencies = ["yt-dlp[deno]", "yt-dlp-ejs", "PyYAML"]
+dependencies = ["yt-dlp[deno]", "yt-dlp-ejs", "mutagen", "PyYAML"]
 
 [project.urls]
 "Homepage" = "https://github.com/peteh/yt-abs"

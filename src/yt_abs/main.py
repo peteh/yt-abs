@@ -88,6 +88,35 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
     ydl_opts = {
         "format": f"bestaudio[ext={default_format}]/bestaudio/best",
         "outtmpl": str(book_dir / "%(playlist_index)03d - %(title)s.%(ext)s"),
+
+        # Audio extraction
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "m4a",
+            },
+            {
+                "key": "FFmpegMetadata",
+            },
+            {
+                "key": "EmbedThumbnail",
+            },
+        ],
+        "download_archive": str(archive_path),
+
+        # Thumbnail handling
+        "writethumbnail": True,
+        "convertthumbnails": "jpg",  # critical for compatibility with MP3
+
+        # Optional but sane defaults
+        "noplaylist": False,
+        "ignoreerrors": True,
+    }
+
+    # TODO: these were messed up
+    ydl_opts2 = {
+        "format": f"bestaudio[ext={default_format}]/bestaudio/best",
+        "outtmpl": str(book_dir / "%(playlist_index)03d - %(title)s.%(ext)s"),
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -104,17 +133,6 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
         "download_archive": str(archive_path),
 #        "remote_components": "ejs:npm",
     }
-
-    if download_thumbnails:
-        ydl_opts["write_thumbnail"] = True
-        ydl_opts["postprocessors"].append({
-            "key": "FFmpegMetadata",
-            "add_metadata": True
-        })
-        ydl_opts["postprocessors"].append({
-                "key": "EmbedThumbnail",
-                'already_have_thumbnail': False, # avoid re-downloading thumbnail if it already exists
-        })
 
     print(f"Downloading playlist {url} to {book_dir} as {default_format} {'with thumbnails' if download_thumbnails else 'without images'} (archive={archive_path})...")
 

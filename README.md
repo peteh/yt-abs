@@ -17,7 +17,6 @@ Create `config.yml` (or `config.yaml`) in project root with this structure:
 
 ```yaml
 refresh_time: "1h"  # optional: repeat downloads every 1 hour (1h, 30min, 1d, 300s)
-download_thumbnails: true  # optional: download video thumbnails (default: true)
 archive_path: "/audiobookshelf/.yt-abs-archive.txt"  # optional, default is .yt-abs-archive.txt in /audiobookshelf
 
 playlists:
