@@ -17,6 +17,7 @@ Create `config.yml` (or `config.yaml`) in project root with this structure:
 
 ```yaml
 refresh_time: "1h"  # optional: repeat downloads every 1 hour (1h, 30min, 1d, 300s)
+download_images: true  # optional: download video thumbnails (default: true)
 archive_path: "/audiobookshelf/.yt-abs-archive.txt"  # optional, default is .yt-abs-archive.txt in /audiobookshelf
 
 playlists:
@@ -58,8 +59,10 @@ docker compose up --build
 ## Behavior
 
 - Default format: `m4a`
-- Supports `yt-dlp` download archive to avoid duplicates (`download_archive`)
+- Supports `yt-dlp` download archive to avoid duplicates
 - Outputs to `out_dir/<book_title>/<playlist_index> - <title>.m4a`
-- Audiobookshelf-friendly structure with `metadata.json` per book
+- Downloads video thumbnails as `<playlist_index> - <title>.(jpg|webp)` (configurable via `download_images`)
+- Generates `metadata.json` per book with title/author/description
+- Audiobookshelf-ready folder structure
 - If `refresh_time` is set, downloads periodically; otherwise runs once
 - Press Ctrl+C to stop periodic mode
