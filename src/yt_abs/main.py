@@ -63,7 +63,7 @@ def find_config(path: Path):
     raise FileNotFoundError("No config file found in current directory (config.yml or config.yaml)")
 
 
-def download_playlist(entry, default_format: str, archive_path: Path, download_thumbnails: bool = True):
+def download_playlist(entry, default_format: str, archive_path: Path):
     url = entry.get("url")
     if not url:
         raise ValueError("Each playlist entry must specify 'url'")
@@ -134,7 +134,7 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
 #        "remote_components": "ejs:npm",
     }
 
-    print(f"Downloading playlist {url} to {book_dir} as {default_format} {'with thumbnails' if download_thumbnails else 'without images'} (archive={archive_path})...")
+    print(f"Downloading playlist {url} to {book_dir} as {default_format} (archive={archive_path})...")
 
     with YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
@@ -166,8 +166,6 @@ def main(argv=None):
     if not playlists:
         raise ValueError("'playlists' is empty in config")
 
-    download_thumbnails = config.get("download_thumbnails", True)
-
     refresh_time_str = config.get("refresh_time")
     if refresh_time_str:
         refresh_seconds = parse_refresh_time(refresh_time_str)
@@ -178,7 +176,7 @@ def main(argv=None):
     try:
         while True:
             for playlist in playlists:
-                download_playlist(playlist, default_format=args.format, archive_path=archive_path, download_thumbnails=download_thumbnails)
+                download_playlist(playlist, default_format=args.format, archive_path=archive_path)
             
             if refresh_seconds is None:
                 break

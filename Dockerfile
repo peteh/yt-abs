@@ -5,7 +5,8 @@ WORKDIR /app
 # system dependencies for yt-dlp optional features (ffmpeg, etc)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
-#    atomicparsley \
+    # for m4a metadata editing: 
+    atomicparsley \ 
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml .
