@@ -165,7 +165,8 @@ def download_video(
 ):
     ydl_opts = {
         "format": f"bestaudio[ext={default_format}]/bestaudio/best",
-        "outtmpl": str(out_dir / f"{playlist_index:03d} - %(title)s.%(ext)s"),
+        #"outtmpl": str(out_dir / f"{playlist_index:03d} - %(title)s.%(ext)s"),
+        "outtmpl": str(out_dir / f"%(upload_date>%Y-%m-%d)s %(title)s.%(ext)s"),
         # Audio extraction
         "postprocessors": [
             {
@@ -206,11 +207,22 @@ def download_playlist(entry, default_format: str, archive_path: Path):
     book_title = entry.get("book_title") or "%(playlist_title)s"
     book_dir = out_dir / book_title
     book_dir.mkdir(parents=True, exist_ok=True)
+    
+    info = extract_playlist_info(url)
+    if not entry.get("author"):    
+        author_name = info.get("uploader", "Unknown")
+    else:
+        author_name = entry.get("author")
+    
+    if not entry.get("description"):
+        description = info.get("description", "")
+    else:
+        description = entry.get("description", "")
 
     metadata = {
         "title": book_title,
-        "author": entry.get("author", "Unknown"),
-        "description": entry.get("description", ""),
+        "author": author_name,
+        "description": description,
     }
     metadata_file = book_dir / "metadata.json"
     if not metadata_file.exists():
