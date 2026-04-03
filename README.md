@@ -28,6 +28,7 @@ playlists:
     book_title: "My Book Title" # optional, will use playlist name if not set
     description: "Podcast series about beer" # optional, will be set to "" if nothing provided
     author: "Author Name" # optional, will be set to Unknown if not set
+    latest_entries: 10 # optional, only download the latest X playlist items (newest items)
   - url: "https://www.youtube.com/playlist?list=PL..."
     out_dir: "/audiobookshelf"
     book_title: "Another Book"

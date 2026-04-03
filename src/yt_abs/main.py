@@ -85,6 +85,24 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
     if not metadata_file.exists():
         metadata_file.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    playlist_items = None
+    latest_entries = entry.get("latest_entries")
+    if latest_entries is not None:
+        try:
+            latest_entries = int(latest_entries)
+            if latest_entries > 0:
+                with YoutubeDL({"quiet": True, "no_warnings": True}) as ydl:
+                    playlist_info = ydl.extract_info(url, download=False)
+                entries = playlist_info.get("entries") if isinstance(playlist_info, dict) else None
+                if entries and isinstance(entries, list):
+                    total = len(entries)
+                    if total > latest_entries:
+                        start = total - latest_entries + 1
+                        playlist_items = f"{start}-{total}"
+                        print(f"Limiting playlist to latest {latest_entries} entries (items {playlist_items})")
+        except Exception as e:
+            print(f"Warning: could not resolve latest_entries status for {url}: {e}")
+
     ydl_opts = {
         "format": f"bestaudio[ext={default_format}]/bestaudio/best",
         "outtmpl": str(book_dir / "%(playlist_index)03d - %(title)s.%(ext)s"),
@@ -107,6 +125,9 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
         ydl_opts["postprocessors"].append({
             "key": "FFmpegMetadata",
         })
+
+    if playlist_items:
+        ydl_opts["playlist_items"] = playlist_items
 
     print(f"Downloading playlist {url} to {book_dir} as {default_format} {'with thumbnails' if download_thumbnails else 'without images'} (archive={archive_path})...")
 
