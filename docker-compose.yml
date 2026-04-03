@@ -2,6 +2,7 @@ services:
   yt-abs:
     build: .
     container_name: yt-abs
+    user: "1000:1000"   # UID:GID
     volumes:
       - .:/app:delegated
       - ./config.yml:/app/config.yml:ro
