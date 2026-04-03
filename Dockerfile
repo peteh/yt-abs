@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY pyproject.toml .
 COPY README.md .
 COPY src ./src
-COPY scripts ./scripts
 
 RUN pip install --no-cache-dir .
 
