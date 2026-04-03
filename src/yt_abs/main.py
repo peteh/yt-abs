@@ -85,31 +85,6 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
     if not metadata_file.exists():
         metadata_file.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    playlist_items = None
-    latest_entries = entry.get("latest_entries")
-    if latest_entries is not None:
-        try:
-            latest_entries = int(latest_entries)
-            if latest_entries > 0:
-                with YoutubeDL({"quiet": True, "no_warnings": True, "extract_flat": True}) as ydl:
-                    playlist_info = ydl.extract_info(url, download=False)
-
-                entries = None
-                if isinstance(playlist_info, dict):
-                    entries = playlist_info.get("entries")
-                elif isinstance(playlist_info, list):
-                    entries = playlist_info
-
-                if entries and isinstance(entries, list):
-                    total = len(entries)
-                    if total > latest_entries:
-                        start = total - latest_entries + 1
-                        playlist_items = f"{start}-{total}"
-                        print(f"Limiting playlist to latest {latest_entries} entries (items {playlist_items})")
-        except Exception as e:
-            print(f"Warning: could not resolve latest_entries status for {url}: {e}")
-            print("Continuing without latest_entries filtering.")
-
     ydl_opts = {
         "format": f"bestaudio[ext={default_format}]/bestaudio/best",
         "outtmpl": str(book_dir / "%(playlist_index)03d - %(title)s.%(ext)s"),
@@ -132,9 +107,6 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
         ydl_opts["postprocessors"].append({
             "key": "FFmpegMetadata",
         })
-
-    if playlist_items:
-        ydl_opts["playlist_items"] = playlist_items
 
     print(f"Downloading playlist {url} to {book_dir} as {default_format} {'with thumbnails' if download_thumbnails else 'without images'} (archive={archive_path})...")
 
@@ -168,7 +140,7 @@ def main(argv=None):
     if not playlists:
         raise ValueError("'playlists' is empty in config")
 
-    download_thumbnails = config.get("download_images", True)
+    download_thumbnails = config.get("download_thumbnails", True)
 
     refresh_time_str = config.get("refresh_time")
     if refresh_time_str:

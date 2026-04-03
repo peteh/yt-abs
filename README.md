@@ -17,7 +17,7 @@ Create `config.yml` (or `config.yaml`) in project root with this structure:
 
 ```yaml
 refresh_time: "1h"  # optional: repeat downloads every 1 hour (1h, 30min, 1d, 300s)
-download_images: true  # optional: download video thumbnails (default: true)
+download_thumbnails: true  # optional: download video thumbnails (default: true)
 archive_path: "/audiobookshelf/.yt-abs-archive.txt"  # optional, default is .yt-abs-archive.txt in /audiobookshelf
 
 playlists:
@@ -28,7 +28,6 @@ playlists:
     book_title: "My Book Title" # optional, will use playlist name if not set
     description: "Podcast series about beer" # optional, will be set to "" if nothing provided
     author: "Author Name" # optional, will be set to Unknown if not set
-    latest_entries: 10 # optional, only download the latest X playlist items (newest items)
   - url: "https://www.youtube.com/playlist?list=PL..."
     out_dir: "/audiobookshelf"
     book_title: "Another Book"
