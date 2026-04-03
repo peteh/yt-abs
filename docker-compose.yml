@@ -1,0 +1,11 @@
+services:
+  yt-abs:
+    build: .
+    container_name: yt-abs
+    volumes:
+#      - .:/app:delegated
+      - ./config.yml:/app/config.yml:ro
+      - ./audiobookshelf:/audiobookshelf:rw
+    environment:
+      - PYTHONUNBUFFERED=1
+

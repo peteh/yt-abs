@@ -1,0 +1,26 @@
+[project]
+name = "yt-abs"
+version = "0.1.0"
+description = "Youtube playlist downloader for Audiobookshelf"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [ { name = "peteh" } ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+keywords = ["youtube", "playlist", "audiobookshelf", "yt-dlp"]
+dependencies = ["yt-dlp", "PyYAML"]
+
+[project.urls]
+"Homepage" = "https://github.com/peteh/yt-abs"
+"Source" = "https://github.com/peteh/yt-abs"
+
+[project.scripts]
+yt-abs = "yt_abs.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
