@@ -93,12 +93,14 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
                 "key": "FFmpegExtractAudio",
                 "preferredcodec": default_format,
                 "preferredquality": "192",
-            }
+            },
+            
         ],
         "ignoreerrors": True,
         "quiet": False,
-        "no_warnings": True,
+        "no_warnings": False,
         "restrictfilenames": False,
+        'merge_output_format': 'm4a',
         "download_archive": str(archive_path),
     }
 
@@ -106,6 +108,11 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
         ydl_opts["write_thumbnail"] = True
         ydl_opts["postprocessors"].append({
             "key": "FFmpegMetadata",
+            "add_metadata": True
+        })
+        ydl_opts["postprocessors"].append({
+                "key": "EmbedThumbnail",
+                'already_have_thumbnail': False, # avoid re-downloading thumbnail if it already exists
         })
 
     print(f"Downloading playlist {url} to {book_dir} as {default_format} {'with thumbnails' if download_thumbnails else 'without images'} (archive={archive_path})...")
