@@ -102,6 +102,7 @@ def download_playlist(entry, default_format: str, archive_path: Path, download_t
         "restrictfilenames": False,
         'merge_output_format': 'm4a',
         "download_archive": str(archive_path),
+#        "remote_components": "ejs:npm",
     }
 
     if download_thumbnails:
