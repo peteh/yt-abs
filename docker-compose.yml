@@ -9,4 +9,5 @@ services:
       - ./audiobookshelf:/audiobookshelf:rw
     environment:
       - PYTHONUNBUFFERED=1
+    restart: unless-stopped
 
